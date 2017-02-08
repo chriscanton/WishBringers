@@ -1,6 +1,8 @@
 var appVar = angular.module('app', []);
 
 appVar.controller('TotalWishesController', function($scope,$window) {
+
+	console.log("wishes controller")
 	
 	$scope.wishlist = JSON.parse($window.localStorage['wishes'] || '{}');
 	$scope.total = 0;

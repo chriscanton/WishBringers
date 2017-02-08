@@ -8,5 +8,8 @@
   "dependencies": {
     "express": "3.2.6",
     "ejs": "*"
+  },
+  "devDependencies": {
+    "sqlite3": "^3.1.8"
   }
 }

@@ -1,5 +1,5 @@
 var ejs = require("ejs");
-var mysql = require('./mysql');
+var mysql = require('./sqllite');
 
 exports.addOrganization = function(req,res)
 {

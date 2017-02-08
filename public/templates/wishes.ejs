@@ -66,16 +66,16 @@
     <div ng-repeat="data in items track by $index" class="col-md-4" ng-model="wishlist">
     <div id="product-box" class="well">
     	<div id ="individual-products" style="width:100%;height:230px;border:1px solid ;border-radius: 15px; background-color:#ffffff; well" >
-    	     <input id="hiddenattr" type="hidden" value="{{($index+1)%9}}" ;>
-		     <div class="col-md-6" style="width:100%;height:30%" >
+    	     <input id="hiddenattr" type="hidden" value="{{($index+1)%9}}" />
+		     <div class="col-md-6" style="width:100%;height:30%" />
 		     </br>
 			    <div class="block">
-		    		<label>Name</label>
-		    		{{data.child_name}}
+		    		<label>Name:</label>
+		    		{{data.giftDescription}}
 				</div>
 				 <div class="block">
 		    		<label>Age:</label>
-		    		 {{data.child_age}}
+		    		 {{data.cardAge}}
 				</div>
 				  <div class="block" >
 		    		<label>Price: </label>

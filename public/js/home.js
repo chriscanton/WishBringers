@@ -1,4 +1,4 @@
-var appVar = angular.module('app', [ "ngRoute","rzModule","elasticsearch"]);
+var appVar = angular.module('app', [ "ngRoute","rzModule"]);
 var index = 'wishlist1';
 var type = 'logs'
 
@@ -15,20 +15,29 @@ appVar.config([ '$routeProvider', function($routeProvider) {
 	
 } ]);
 
-appVar.service('client', function (esFactory) {
-    return esFactory({
-      host: 'https://b054df0d.ngrok.io',
-      apiVersion: '2.3',
-      log: 'trace'
+/*appVar.service('client', function ($http) {
+    return $http({
+		method: 'GET',
+      	host: 'https://localhost:3000/getWishes'
     });
-  });
-appVar.controller('WishesController', function($scope, $http,$rootScope,$window,client) {
+  });*/
+appVar.controller('WishesController', function($scope, $http,$rootScope) {
 
 	$scope.items = [];
 	
 	$scope.wishesData = function(){
-		console.log("inside wishes----------");
-		 client.search({
+		$http({
+			method: 'GET',
+			url: '/getWishes'
+		}).then( function successCallback(response) {
+			console.log(response)
+			$scope.res = response.data.wishes;
+			for (var i = 0; i < $scope.res.length; i++) {
+				console.log("item: " + i + " pushed: " + JSON.stringify($scope.res[i]))
+				$scope.items.push($scope.res[i])
+			}
+		})
+		 /*client.search({
 			  index: index,
 			  type: type,
 			  body: {
@@ -47,7 +56,7 @@ appVar.controller('WishesController', function($scope, $http,$rootScope,$window,
 			  //  console.log( "inside wishes result-----------------"+hits);
 			}, function (err) {
 			    console.trace(err.message);
-			});
+			});*/
 	};
 	 
 	
@@ -71,7 +80,7 @@ appVar.controller('WishesController', function($scope, $http,$rootScope,$window,
 			};
 	
 	$scope.onSlider = function(){
-		 client.search({
+		 /*client.search({
 			  index: index,
 			  type: type,
 			  body: {
@@ -93,7 +102,7 @@ appVar.controller('WishesController', function($scope, $http,$rootScope,$window,
 			    console.log(hits);
 			}, function (err) {
 			    console.trace(err.message);
-			});
+			});*/
 	}
 	
 	$scope.onCheckSearch = function(bool,range){
@@ -113,7 +122,7 @@ appVar.controller('WishesController', function($scope, $http,$rootScope,$window,
 		}
 		
 
-		 client.search({
+		 /*client.search({
 			  index: index,
 			  type: type,
 			  body: {
@@ -135,11 +144,11 @@ appVar.controller('WishesController', function($scope, $http,$rootScope,$window,
 			    console.log(hits);
 			}, function (err) {
 			    console.trace(err.message);
-			});
+			});*/
 	}
 
 	 $scope.filterResults = function(gender){
-		 client.search({
+		 /*client.search({
 			  index: index,
 			  type: type,
 			  body: {
@@ -154,7 +163,7 @@ appVar.controller('WishesController', function($scope, $http,$rootScope,$window,
 			    console.log(hits);
 			}, function (err) {
 			    console.trace(err.message);
-			});
+			});*/
 		 
 			}
 	 $scope.per_page = 12;

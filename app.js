@@ -8,7 +8,7 @@ var express = require('express')
   , user = require('./routes/user')
   , http = require('http')
   , path = require('path')
-  , mysql = require('./routes/mysql')
+  , sqllite = require('./routes/sqllite')
   , group = require('./routes/wishes')
   , wishes = require('./routes/wishes') 
   ,http = require('http')
@@ -89,7 +89,7 @@ app.get('/checkout',function(req,res) {
 });
 app.post('/InsertWishes',wishes.uploadData);
 
-app.post('/insertData', mysql.insertData );
+app.post('/insertData', sqllite.insertData );
 
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));

@@ -5,7 +5,7 @@ exports.getWishes = function(req,res)
 {
 	var iResults={}, getWishes = "select * from wishes"
 	sqlite.fetchData(function(err, results) {
-		var item, idx=0
+		var item={}, idx=0
 		if (err) {
 			throw err
 		} else {
@@ -13,14 +13,13 @@ exports.getWishes = function(req,res)
 				iResults.wishes = []
 				while (idx < results.length){
 					try{
-						item = JSON.parse(results[idx].thing)
+						item = results[idx]
 					} catch (ex) {
 						console.log(ex)
 					}
 					console.log(typeof item)
 					if (item != null && typeof item != 'undefined') {
 						iResults.wishes.push(item)
-						console.log(item.wishCardId)
 					}
 					idx++
 				}
@@ -36,23 +35,12 @@ var fs = require('fs');
 var Papa = require('babyparse');
 var mapRow = function(mapMe) {
 	var vgtData = {}
-	vgtData.wishCardId = mapMe[0]
-	vgtData.agencyCode = mapMe[8]
-	vgtData.warehouse = mapMe[9]
-	vgtData.barcode = mapMe[10]
-	vgtData.agencyZone = mapMe[11]
-	vgtData.agencyChild = mapMe[12]
-	vgtData.firstName = mapMe[13]
-	vgtData.cardGender = mapMe[14]
-	vgtData.cardAge = mapMe[15]
-	vgtData.specialNeed = mapMe[16]
-	vgtData.preamble = mapMe[17]
-	vgtData.giftId = mapMe[18]
-	vgtData.giftDescription = mapMe[19]
-	vgtData.giftAttribute = mapMe[20]
-	vgtData.notice = mapMe[21]
-	vgtData.giftDescription2 = mapMe[22]
-	vgtData.hostCardCode = mapMe[23]
+	vgtData.giftDescription = mapMe[0]
+	vgtData.age = mapMe[1]
+	vgtData.price = mapMe[2]
+	vgtData.quantityNeeded = mapMe[3]
+	vgtData.gender = mapMe[4]
+	console.log(JSON.stringify(vgtData))
 
 	return vgtData
 }
@@ -64,13 +52,11 @@ exports.uploadData = function(req, res) {
 	Papa.parse(content, {
 	    step: function(row){
 	        var data = mapRow(row.data[0])
-
-			if(data.wishCardId != undefined && data.wishCardId != "")
-				sqlite.insertData("WISHES", data)
+			sqlite.insertData(data)
 	    }
 	});
 	
 	res.render('home.ejs');
-};
+}
 
 

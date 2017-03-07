@@ -9,6 +9,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
     <link rel='stylesheet' href='/stylesheets/style.css' />
     <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.4.5/angular.js"></script>
+    <!--Google signin stuff -->
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <meta name="google-signin-client_id" content="854908827131-61b6v2vpva2lh4103h10ad0euhnarge6.apps.googleusercontent.com">
+
     <script src= "/js/register.js"></script>
     
     
@@ -27,37 +31,10 @@
 <!-- Form Name -->
 <legend>Registration</legend>
 
-<!-- Text input-->
 <div class="form-group">
-  <label class="col-md-4 control-label" for="fn">Email Address</label>  
+  <label class="col-md-4 control-label" for="fn">Organization Name</label>  
   <div class="col-md-4">
-  <input id="fn" name="fn" type="text" placeholder="Please provide Email Address" ng-model="user.emailaddress" class="form-control input-md" required="">
-    
-  </div>
-</div>
-
-<div class="form-group">
-  <label class="col-md-4 control-label" for="fn">Name</label>  
-  <div class="col-md-4">
-  <input id="organizationName" name="organizationName" type="text" placeholder="Please provide first name" ng-model="user.name" class="form-control input-md" required="">
-    
-  </div>
-</div>
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="ln">Password</label>  
-  <div class="col-md-4">
-  <input id="ln" name="ln" type="password" placeholder="Please provide Password" ng-model="user.password" class="form-control input-md" required="">
-    
-  </div>
-</div>
-
-<!-- Text input-->
-<div class="form-group">
-  <label class="col-md-4 control-label" for="cmpny">Confirm Password</label>  
-  <div class="col-md-4">
-  <input id="cmpny" name="cmpny" type="password" placeholder="Please confirm your password" class="form-control input-md" required="">
+  <input id="organizationName" name="organizationName" type="text" placeholder="Please provide organization name" ng-model="org.name" class="form-control input-md" required="">
     
   </div>
 </div>
@@ -66,7 +43,7 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="phone">Logo URL</label>
   <div class="col-md-4">
-  <input id="logourl" name="logourl" type="text" placeholder="Please provide a logo" ng-model="user.url" class="form-control input-md" required="">
+  <input id="logourl" name="logourl" type="text" placeholder="Please provide a logo" ng-model="org.logo_url" class="form-control input-md" required="">
   </div>
 </div>
 
@@ -74,16 +51,46 @@
 <div class="form-group">
   <label class="col-md-4 control-label" for="submit"></label>
   <div class="col-md-4">
-    <button id="submit" name="submit" ng-click="registerUser()" class="btn btn-primary">SUBMIT</button>
+    <button id="submit" name="submit" ng-click="registerUser(org)" class="btn btn-primary">SUBMIT</button>
   </div>
 </div>
 
+
+<div class="g-signin2" data-onsuccess="onSignIn"></div>
+<a href="#" onclick="signOut()">Sign out</a>
+<script>
+function signOut() {  
+      var auth2 = gapi.auth2.getAuthInstance()
+    	auth2.signOut().then(function () {
+      		console.log('User signed out.')
+      });
+}
+
+function onSignIn(googleUser) {
+  var profile = googleUser.getBasicProfile(),
+		    id_token = googleUser.getAuthResponse().id_token,
+			g_user = {}
+
+		g_user.name = profile.getName()
+		g_user.email = profile.getEmail()
+		g_user.token = id_token
+
+		window.localStorage.setItem('g_user', JSON.stringify(g_user))
+
+		console.log('Name: ' + profile.getName())
+		console.log('Token: ' + id_token)
+		console.log('Image URL: ' + profile.getImageUrl())
+		console.log('Email: ' + profile.getEmail()) // This is null if the 'email' scope is not present.
+  
+}
+</script>
 </fieldset>
 
 </div>
 </div>
 </div>
 </form>
+
 
 
 </div>

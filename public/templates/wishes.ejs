@@ -71,11 +71,11 @@
 		     </br>
 			    <div class="block">
 		    		<label>Name:</label>
-		    		{{data.giftDescription}}
+		    		{{data.description}}
 				</div>
 				 <div class="block">
 		    		<label>Age:</label>
-		    		 {{data.cardAge}}
+		    		 {{data.age}}
 				</div>
 				  <div class="block" >
 		    		<label>Price: </label>
@@ -90,7 +90,7 @@
 	    </div>
 	    <br>
 	    <div>
-	     <button type="button" style="margin-left:20%" ng-click="flag=!flag; addToCart($index,flag)"  id="{{$index}}" ng-init="status='Fulfill this Wish'; flag=true" ng-class="{'btn btn-success btn-xs': flag, 'btn btn-danger btn-xs': !flag}">{{flag? 'Fulfill this Wish' : 'Remove from cart'}}</button>
+	     <button type="button" style="margin-left:20%" ng-click="flag=!flag; addToCart(data,flag)"  id="{{$index}}" ng-init="status='Fulfill this Wish'; flag=true" ng-class="{'btn btn-success btn-xs': flag, 'btn btn-danger btn-xs': !flag}">{{flag? 'Fulfill this Wish' : 'Remove from cart'}}</button>
 	    </div>
 	    
 	    

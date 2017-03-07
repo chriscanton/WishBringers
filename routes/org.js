@@ -1,5 +1,5 @@
 var ejs = require("ejs");
-var mysql = require('./sqllite');
+var sqllite = require('./sqllite');
 
 exports.addOrganization = function(req,res)
 {
@@ -18,7 +18,7 @@ exports.addOrganization = function(req,res)
 			+ "','"
 			+ logoURL
 			+ "','" + email + "','" + size + "');";
-	mysql.fetchData(function(err, results) {
+	sqllite.fetchData(function(err, results) {
 		if (err) {
 			throw err;
 		} else {

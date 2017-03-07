@@ -176,18 +176,19 @@ appVar.controller('WishesController', function($scope, $http,$rootScope) {
 	 
 	
 	
-	$scope.addToCart = function($index,status){
+	$scope.addToCart = function(wish,status){
+		console.log($rootScope.cartProducts.length)
 		
 		if(status == false)
 			{
-			$rootScope.wishesCount = $rootScope.wishesCount+1;
-			$rootScope.cartProducts.push({"name":$scope.items[$index].child_name, "price":$scope.items[$index].price,
-				"age" : $scope.items[$index].child_age, "url": $scope.items[$index].imageurl});
+			$rootScope.wishesCount = $rootScope.wishesCount+1
+			$rootScope.cartProducts.push({"name":wish.description, "price":wish.price,
+				"age" : wish.age, "url": wish.imageurl})
 			}
 		else
 			{
-			$rootScope.wishesCount = $rootScope.wishesCount -1;
-			$scope.removeItem($index);
+			$rootScope.wishesCount = $rootScope.wishesCount -1
+			$scope.removeItem(wish)
 			
 			}
 		
@@ -198,7 +199,8 @@ appVar.controller('WishesController', function($scope, $http,$rootScope) {
 		  }
 	
 	$scope.saveInCache = function(){
-		$window.localStorage.setItem('wishes', JSON.stringify($rootScope.cartProducts));
+		console.log("Saving to cache ")
+		window.localStorage.setItem('wishes', JSON.stringify($rootScope.cartProducts));
 	}
 	
 });

@@ -15,7 +15,8 @@ var express = require('express')
   , path = require('path')
   , wishes = require('./routes/wishes')
   , org = require('./routes/org')
-  , donation = require('./routes/donation');
+  , donation = require('./routes/donation')
+  , registerUser = require('./routes/registerUser')
 
 var app = express();
 
@@ -56,7 +57,7 @@ app.get('/totalWishes', function(req, res) {
 //    
 //});
 
-app.get('/registerdonors', routes.registercompany);
+app.get('/register', routes.registercompany);
 
 app.get('/getWishes',wishes.getWishes);
 //app.get('/addOrganization',org.addOrganization);
@@ -65,6 +66,8 @@ app.get('/getWishes',wishes.getWishes);
 app.get('/UploadWishes', function(req, res) {
 	res.render('../views/WishUploader.ejs');
 });
+
+app.post('/registerUser', registerUser.registerUser);
 
 app.post('/InsertWishes',wishes.uploadData);
 
@@ -78,8 +81,6 @@ app.get('/home', function(req,res){
 });
 
 app.get('/getWishes',wishes.getWishes);
-//app.get('/addOrganization',org.addOrganization);
-//app.get('/addDonation',donation.addDonation);
 app.get('/UploadWishes', function(req, res) {
 	res.render('../views/WishUploader.ejs');
 });

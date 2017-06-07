@@ -3,16 +3,34 @@ body {
   padding: 60px 0px;
   background-color: #B2D1E5;
   margin: 0 auto;
-  width: 400px;
+  width: 75%;
 }
 .body-text {
-  padding-bottom: 30px;
   font-family: "Roboto";
   font-size: .9em;
   color: #fff;
 }
 .form-container {
   width: 100%;
+}
+
+.hosted-field {
+  border: 1px solid;
+  border-radius: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 3px;
+  margin-right: 3px;
+  font-size: 1em;
+  height: 3em;
+}
+.bootstrap-basic {
+  background: white;
+}
+#checkout-form {
+  width: 90%;
+  margin: 2em auto;
+  background: white;
 }
 .card-wrapper {
   background-color: #6FB7E9;
@@ -32,19 +50,19 @@ h1 {
 input {
   margin: 1px 0px;
 }
-input[type="text"]{
-  display: block;
-  height: 40px;
-  width: 389px;
-  padding-left: 10px;
-  border: none;
-}
-input[type="email"]{
-  display: block;
-  height: 40px;
-  width: 389px;
-  padding-left: 10px;
-  border: none;
+
+input[type="text"],
+input[type="email"] {
+  border: 1px solid;
+  border-radius: 8px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+  margin-left: 3px;
+  margin-right: 3px;
+  font-size: 1em;
+  height: 3em;
+  width:100%;
+  background-color: white;
 }
 input[type="submit"]{
   display: block;

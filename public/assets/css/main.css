@@ -1924,7 +1924,6 @@
 
 	input[type="text"],
 	input[type="password"],
-	input[type="email"],
 	select,
 	textarea {
 		-moz-appearance: none;
@@ -1943,7 +1942,6 @@
 
 		input[type="text"]:invalid,
 		input[type="password"]:invalid,
-		input[type="email"]:invalid,
 		select:invalid,
 		textarea:invalid {
 			box-shadow: none;
@@ -1983,7 +1981,6 @@
 
 	input[type="text"],
 	input[type="password"],
-	input[type="email"],
 	select {
 		height: 3.5em;
 	}
@@ -2083,7 +2080,6 @@
 
 	input[type="text"],
 	input[type="password"],
-	input[type="email"],
 	select,
 	textarea {
 		background-color: rgba(144, 144, 144, 0.075);
@@ -2093,7 +2089,6 @@
 
 		input[type="text"]:focus,
 		input[type="password"]:focus,
-		input[type="email"]:focus,
 		select:focus,
 		textarea:focus {
 			border-color: #51BAA4;
@@ -2150,7 +2145,6 @@
 
 	form.alt input[type="text"],
 	form.alt input[type="password"],
-	form.alt input[type="email"],
 	form.alt select,
 	form.alt textarea {
 		background-color: transparent;
@@ -2928,7 +2922,6 @@
 
 			.wrapper.style1 input[type="text"],
 			.wrapper.style1 input[type="password"],
-			.wrapper.style1 input[type="email"],
 			.wrapper.style1 select,
 			.wrapper.style1 textarea {
 				background-color: #fff;
@@ -2938,7 +2931,6 @@
 
 				.wrapper.style1 input[type="text"]:focus,
 				.wrapper.style1 input[type="password"]:focus,
-				.wrapper.style1 input[type="email"]:focus,
 				.wrapper.style1 select:focus,
 				.wrapper.style1 textarea:focus {
 					border-color: #51BAA4;
@@ -2995,7 +2987,6 @@
 
 			.wrapper.style1 form.alt input[type="text"],
 			.wrapper.style1 form.alt input[type="password"],
-			.wrapper.style1 form.alt input[type="email"],
 			.wrapper.style1 form.alt select,
 			.wrapper.style1 form.alt textarea {
 				background-color: transparent;
@@ -3163,7 +3154,6 @@
 
 			.wrapper.style2 input[type="text"],
 			.wrapper.style2 input[type="password"],
-			.wrapper.style2 input[type="email"],
 			.wrapper.style2 select,
 			.wrapper.style2 textarea {
 				background-color: rgba(255, 255, 255, 0.05);
@@ -3173,7 +3163,6 @@
 
 				.wrapper.style2 input[type="text"]:focus,
 				.wrapper.style2 input[type="password"]:focus,
-				.wrapper.style2 input[type="email"]:focus,
 				.wrapper.style2 select:focus,
 				.wrapper.style2 textarea:focus {
 					border-color: #51BAA4;
@@ -3230,7 +3219,6 @@
 
 			.wrapper.style2 form.alt input[type="text"],
 			.wrapper.style2 form.alt input[type="password"],
-			.wrapper.style2 form.alt input[type="email"],
 			.wrapper.style2 form.alt select,
 			.wrapper.style2 form.alt textarea {
 				background-color: transparent;
@@ -3401,7 +3389,6 @@
 
 			.wrapper.style3 input[type="text"],
 			.wrapper.style3 input[type="password"],
-			.wrapper.style3 input[type="email"],
 			.wrapper.style3 select,
 			.wrapper.style3 textarea {
 				background-color: rgba(255, 255, 255, 0.05);
@@ -3411,7 +3398,6 @@
 
 				.wrapper.style3 input[type="text"]:focus,
 				.wrapper.style3 input[type="password"]:focus,
-				.wrapper.style3 input[type="email"]:focus,
 				.wrapper.style3 select:focus,
 				.wrapper.style3 textarea:focus {
 					border-color: #51BAA4;
@@ -3468,7 +3454,6 @@
 
 			.wrapper.style3 form.alt input[type="text"],
 			.wrapper.style3 form.alt input[type="password"],
-			.wrapper.style3 form.alt input[type="email"],
 			.wrapper.style3 form.alt select,
 			.wrapper.style3 form.alt textarea {
 				background-color: transparent;
@@ -3768,6 +3753,11 @@
 				padding: 0.5em 1em;
 			}
 
+	}
+
+	#btPaymentForm {
+		background-color: white;
+		max-width: 100%;
 	}
 
 /* Nav */

@@ -1,0 +1,7 @@
+{
+    "braintree": {
+        "merchantId": "sqb9dtqym3j7xs3v",
+        "publicKey": "bnx8tf6nj5jrcvpv",
+        "privateKey": "d34b132a9895c6c957147c2c6418fb9b"
+    }
+}

@@ -13,25 +13,19 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.2/jquery.js"></script>
    <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
    	<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.0-rc.0/angular-animate.min.js"></script>
-   		<script type="text/javascript" src="https://js.stripe.com/v2/"></script>
    		
    
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.min.css">
        
   <script src= "/js/payment.js"></script>
-  <script src="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.js"></script>
-  <link rel="stylesheet" type="text/css" href="https://rawgit.com/rzajac/angularjs-slider/master/dist/rzslider.css"/>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-bootstrap/0.14.3/ui-bootstrap-tpls.js"></script>
-  <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/121761/card.js'></script>
-<script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/121761/jquery.card.js'></script>
   
   
 	</head>
 	
-<body ng-app="app" ng-controller="PaymentController">
+<body>
  
   	 
-<img alt="full screen background image" src="../images/water-quality6.jpg" id="full-screen-background-image" />
 <!--Start Header -->
    
 	<nav class="navbar navbar-inverse navbar-fixed-top">
@@ -45,38 +39,210 @@
  </div>
   	 </nav>	
   	 <br><br><br><br>
-<div class="col-md-12 well">
 
 
-<div >
-  <form>
-    <div class="form-container">
-      <div >
-        <h1>Payment Information</h1>
-      </div> <!-- end of personal-information -->
-      <input id="input-field" class="form-control" name="streetaddress" required="required" autocomplete="on" maxlength="45" placeholder="Streed Address"/>
+<div id="btPaymentForm">
+  <form id="checkout-form" action="/transaction" method="post">
+  <div id="error-message"></div>
 
-      <input id="column-left" class="form-control" name="city" required="required" autocomplete="on" maxlength="20" placeholder="City"/>
+  <label for="card-number">Card Number</label>
+  <div class="hosted-field" id="card-number"></div>
 
-      <input id="column-right" class="form-control" name="zipcode" required="required" autocomplete="on" pattern="[0-9]*" maxlength="5" placeholder="ZIP code"/>
-      
-      <input id="input-field" class="form-control" name="email" required="required" autocomplete="on" maxlength="40" placeholder="Email"/>
-    
-    <div class="card-wrapper"></div>
-      <input id="column-left" class="form-control" name="first-name" placeholder="First Name"/>
-      
-      <input id="column-right" class="form-control" name="last-name" placeholder="Surname"/>
-      
-      <input id="input-field" class="form-control" class="form-control" name="number" placeholder="Card Number"/>
-     
-      <input id="column-left" class="form-control" name="expiry" placeholder="MM / YY"/>
-        
-      <input id="column-right" class="form-control" name="cvc" placeholder="CCV"/>
-    
-      <input  class="btn btn-primary" ng-click="submitTransaction()" value="Submit"/>
-    </form>
- </div>
+  <label for="cvv">CVV</label>
+  <div class="hosted-field" id="cvv"></div>
+
+  <label for="expiration-date">Expiration Date</label>
+  <div class="hosted-field" id="expiration-date"></div>
+
+  <label class="control-label">Zipcode</label>
+  <div class="hosted-field" id="postal-code"></div>
+
+  <label class="control-label">Name</label>
+  <input type="text" id="name" name="name">
+
+  <label class="control-label">Street Address</label>
+  <input type="text" id="address" name="address">
+
+  <label class="control-label">City</label>
+  <input type="text" id="city" name="city">
+
+  <label class="control-label">State</label>
+  <input type="text" id="state" name="state">
+
+  <label class="control-label">Email</label>
+  <input type="email" id="email" name="email">
+
+  <label class="control-label">Company</label>
+  <input type="text" id="company" name="company">
+
+  <input type="hidden" name="organization" >
+  <input type="hidden" name="payment_method_nonce">
+  <input type="submit" value="Pay $10" disabled>
+</form>
 </div>
+<!-- Load the Client component. -->
+<script src="https://js.braintreegateway.com/web/3.11.0/js/client.min.js"></script>
+
+<!-- Load the Hosted Fields component. -->
+<script src="https://js.braintreegateway.com/web/3.11.0/js/hosted-fields.min.js"></script>
+
+<script>
+//this is for the braintree credit card form
+//TODO: Move this to an external file
+// We generated a client token for you so you can test out this code
+// immediately. In a production-ready integration, you will need to
+// generate a client token on your server (see section below).
+//var authorization = 'eyJ2ZXJzaW9uIjoyLCJhdXRob3JpemF0aW9uRmluZ2VycHJpbnQiOiIyYjIwYjYwNDFlYzhmNDE0MzllOTk0NGVhNzc3MmRhMjY5YjQ3ZGUxZjE2OGJjZDM2NDkwOTkwMTUwMWI0YThifGNyZWF0ZWRfYXQ9MjAxNy0wMy0yNVQyMDoyMjo1OC42ODY3MjQ2MTcrMDAwMFx1MDAyNm1lcmNoYW50X2lkPTM0OHBrOWNnZjNiZ3l3MmJcdTAwMjZwdWJsaWNfa2V5PTJuMjQ3ZHY4OWJxOXZtcHIiLCJjb25maWdVcmwiOiJodHRwczovL2FwaS5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tOjQ0My9tZXJjaGFudHMvMzQ4cGs5Y2dmM2JneXcyYi9jbGllbnRfYXBpL3YxL2NvbmZpZ3VyYXRpb24iLCJjaGFsbGVuZ2VzIjpbXSwiZW52aXJvbm1lbnQiOiJzYW5kYm94IiwiY2xpZW50QXBpVXJsIjoiaHR0cHM6Ly9hcGkuc2FuZGJveC5icmFpbnRyZWVnYXRld2F5LmNvbTo0NDMvbWVyY2hhbnRzLzM0OHBrOWNnZjNiZ3l3MmIvY2xpZW50X2FwaSIsImFzc2V0c1VybCI6Imh0dHBzOi8vYXNzZXRzLmJyYWludHJlZWdhdGV3YXkuY29tIiwiYXV0aFVybCI6Imh0dHBzOi8vYXV0aC52ZW5tby5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tIiwiYW5hbHl0aWNzIjp7InVybCI6Imh0dHBzOi8vY2xpZW50LWFuYWx5dGljcy5zYW5kYm94LmJyYWludHJlZWdhdGV3YXkuY29tLzM0OHBrOWNnZjNiZ3l3MmIifSwidGhyZWVEU2VjdXJlRW5hYmxlZCI6dHJ1ZSwicGF5cGFsRW5hYmxlZCI6dHJ1ZSwicGF5cGFsIjp7ImRpc3BsYXlOYW1lIjoiQWNtZSBXaWRnZXRzLCBMdGQuIChTYW5kYm94KSIsImNsaWVudElkIjpudWxsLCJwcml2YWN5VXJsIjoiaHR0cDovL2V4YW1wbGUuY29tL3BwIiwidXNlckFncmVlbWVudFVybCI6Imh0dHA6Ly9leGFtcGxlLmNvbS90b3MiLCJiYXNlVXJsIjoiaHR0cHM6Ly9hc3NldHMuYnJhaW50cmVlZ2F0ZXdheS5jb20iLCJhc3NldHNVcmwiOiJodHRwczovL2NoZWNrb3V0LnBheXBhbC5jb20iLCJkaXJlY3RCYXNlVXJsIjpudWxsLCJhbGxvd0h0dHAiOnRydWUsImVudmlyb25tZW50Tm9OZXR3b3JrIjp0cnVlLCJlbnZpcm9ubWVudCI6Im9mZmxpbmUiLCJ1bnZldHRlZE1lcmNoYW50IjpmYWxzZSwiYnJhaW50cmVlQ2xpZW50SWQiOiJtYXN0ZXJjbGllbnQzIiwiYmlsbGluZ0FncmVlbWVudHNFbmFibGVkIjp0cnVlLCJtZXJjaGFudEFjY291bnRJZCI6ImFjbWV3aWRnZXRzbHRkc2FuZGJveCIsImN1cnJlbmN5SXNvQ29kZSI6IlVTRCJ9LCJjb2luYmFzZUVuYWJsZWQiOmZhbHNlLCJtZXJjaGFudElkIjoiMzQ4cGs5Y2dmM2JneXcyYiIsInZlbm1vIjoib2ZmIn0=';
+var submit = document.querySelector('input[type="submit"]')
+var form = document.querySelector('#checkout-form')
+
+var createBraintree = function (token) {
+    braintree.client.create({
+    authorization: token
+  }, function (clientErr, clientInstance) {
+    if (clientErr) {
+      // Handle error in client creation
+      console.log(clientErr)
+      return;
+    }
+
+    braintree.hostedFields.create({
+      client: clientInstance,
+      styles: {
+        'input': {
+          'font-size': '14pt'
+        },
+        'input.invalid': {
+          'color': 'red'
+        },
+        'input.valid': {
+          'color': 'green'
+        }
+      },
+      fields: {
+        number: {
+          selector: '#card-number',
+          placeholder: '4111 1111 1111 1111'
+        },
+        cvv: {
+          selector: '#cvv',
+          placeholder: '123'
+        },
+        expirationDate: {
+          selector: '#expiration-date',
+          placeholder: '10/2019'
+        },
+        postalCode: {
+          selector: '#postal-code',
+          placeholder: '95125'
+        }
+      }
+    }, function (hostedFieldsErr, hostedFieldsInstance) {
+      if (hostedFieldsErr) {
+        // Handle error in Hosted Fields creation
+        console.log(hostedFieldsErr)
+        return
+      }
+
+      submit.removeAttribute('disabled')
+
+      form.addEventListener('submit', function (event) {
+      event.preventDefault();
+
+      hostedFieldsInstance.tokenize(function (tokenizeErr, payload) {
+        if (tokenizeErr) {
+          // Handle error in Hosted Fields tokenization
+          return
+        }
+
+        // Put `payload.nonce` into the `payment_method_nonce` input, and then
+        // submit the form. Alternatively, you could send the nonce to your server
+        // with AJAX.
+        document.querySelector('input[name="payment_method_nonce"]').value = payload.nonce
+        form.submit()
+      })
+    }, false)
+    })
+  })
+}
+
+var listener = function() {
+  console.log(this.responseText)
+  createBraintree(this.responseText)
+}
+
+var btToken,
+xhr = new XMLHttpRequest()
+xhr.addEventListener("load", listener)
+//xhr.onload(createBraintree(this.responseText))
+xhr.open('GET', '/client_token')
+xhr.send()
+</script>
+
+<!--<script>
+  //this is for the paypal button
+  //TODO: move this to an external file
+// Fetch the button you are using to initiate the PayPal flow
+var paypalButton = document.getElementById('paypal-button');
+
+// Create a Client component
+var createBraintree = function (token) {
+  braintree.client.create({
+    authorization: token
+  }, function (clientErr, clientInstance) {
+    if(clientErr) {
+      console.log("Error creating client instance" + clientErr);
+    } else {
+      console.log(clientInstance)
+    }
+
+    // Create PayPal component
+    braintree.paypal.create({
+      client: clientInstance
+    }, function (err, paypalInstance) {
+      paypalButton.addEventListener('click', function () {
+        // Tokenize here!
+        paypalInstance.tokenize({
+          flow: 'checkout', // Required
+          amount: 10.00, // Required --TODO: Parameterize thiss so it isn't $10 every time
+          currency: 'USD', // Required
+          locale: 'en_US'
+        }, function (err, tokenizationPayload) {
+          // Tokenization complete
+          // Send tokenizationPayload.nonce to server
+        });
+      });
+    });
+  });
+}
+var listener = function() {
+  console.log(this.responseText)
+  createBraintree(this.responseText)
+}
+
+var btToken,
+xhr = new XMLHttpRequest()
+xhr.addEventListener("load", listener);
+//xhr.onload(createBraintree(this.responseText))
+xhr.open('GET', '/client_token')
+xhr.send()
+
+/*$http({
+  method: 'GET',
+  url: '/client-token'
+}).then(function successCallback(response) {
+    // this callback will be called asynchronously
+    // when the response is available
+    console.log(response.data)
+    btToken = response.data
+    createBraintree()
+  }, function errorCallback(response) {
+    // called asynchronously if an error occurs
+    // or server returns response with an error status.
+    console.log('Error generating Braintree token')
+  });*/
+</script>
+</div>-->
     
     <!--Start Footer -->
 
@@ -84,7 +250,6 @@
 	<div class="navbar-collapse collapse">
 		<ul class="nav navbar-nav navbar-right">
 			<li><a href="#about"></a></li>
-	</div>
 	</div>
 </nav>
 

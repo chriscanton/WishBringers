@@ -67,7 +67,7 @@ appVar.controller('WishesController', function($scope, $http,$rootScope) {
 	$rootScope.wishesCount=0;
 	$rootScope.cartProducts = [];
 	
-	$scope.logourl = localStorage.getItem('logourl');
+	$scope.logourl = "../images/FGT_Logo.png";
 	console.log($scope.logourl);
 	
 	$scope.slider = {

@@ -4,6 +4,7 @@
  */
 
 var express = require('express')
+  , config = require('./config.json')
   , routes = require('./routes')
   , user = require('./routes/user')
   , http = require('http')
@@ -17,6 +18,13 @@ var express = require('express')
   , org = require('./routes/org')
   , donation = require('./routes/donation')
   , registerUser = require('./routes/registerUser')
+  , braintree = require('braintree')
+  , gateway = braintree.connect({
+    environment: braintree.Environment.Sandbox,
+    merchantId: config.braintree.merchantId,
+    publicKey: config.braintree.publicKey,
+    privateKey: config.braintree.privateKey
+  });
 
 var app = express();
 
@@ -74,6 +82,45 @@ app.post('/InsertWishes',wishes.uploadData);
 app.get('/home/*', function(req,res){
 	
 	res.render('home');
+});
+
+app.get("/client_token", function (req, res) {
+  gateway.clientToken.generate({}, function (err, response) {
+    res.send(response.clientToken);
+  });
+});
+
+//TODO: move to separate file
+app.post("/transaction", function(req, res) {
+  //collect nonce
+  var nonce = req.param("payment_method_nonce")
+  console.log("NONCE: " + req.param("state"))
+
+  //send txn to braintree
+  gateway.transaction.sale({
+    amount: "10.00",
+    paymentMethodNonce: nonce,
+    options: {
+      submitForSettlement: true
+    }
+  }, function (err, result) {
+    if (typeof err != 'undefined' && err != null) {
+      console.log(err)
+      res.status(500)
+      res.write("Something went wrong!")
+      res.send()
+    } else {
+      console.log(result)
+      //prep and send response
+      res.status(200)
+      res.write(JSON.stringify(req.body))
+      res.send()
+    }
+    
+
+  });
+
+  
 });
 
 app.get('/home', function(req,res){

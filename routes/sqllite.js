@@ -20,7 +20,7 @@ db.serialize(function() {
     db.run("CREATE TABLE Donor (id INTEGER PRIMARY KEY, name TEXT, email TEXT)")
     //ORGANIZATION
     db.run("CREATE TABLE Organization (id INTEGER PRIMARY KEY, name TEXT, owner INTEGER, link_name TEXT, image_url TEXT, FOREIGN KEY(owner) REFERENCES DRIVELEADER(id))")
-    
+    db.run("CREATE TABLE PERSON (id INTEGER PRIMARY KEY, FirstName TEXT, LastName TEXT, Salutation VARCHAR(3), Address TEXT, City TEXT, STATE CHAR(2), ZIP INTEGER, EMAIL TEXT)")
     
     console.log("tables created!")
   } else {
@@ -62,8 +62,10 @@ exports.insertData = function(data)
     })
 }
 
-function insertOrgDriveLeader(insertOrg, org, driveLeaderId, callback) {
-    if (typeof org == 'undefined') {
+function insertOrgDriveLeader(insertOrg, org, driveLeaderId, orgId, callback) {
+    console.log(org)
+    console.log(orgId)
+    if (typeof orgId == 'undefined') {
         //insert org with the drive leader id
         db.serialize(function() {
             db.run(insertOrg, org.name, driveLeaderId, org.link, org.image)
@@ -94,10 +96,10 @@ exports.insertOrg = function(org, driveLeader, callback) {
                     if (typeof driveLeaderId == 'undefined') {
                             db.run(insertDriveLeader, driveLeader.name, driveLeader.email, driveLeader.token, function(err) {
                                 driveLeaderId = this.lastId
-                                insertOrgDriveLeader(insertOrg, org, driveLeaderId, callback)
+                                insertOrgDriveLeader(insertOrg, org, driveLeaderId, orgId, callback)
                             })
                     } else {
-                        insertOrgDriveLeader(insertOrg, org, driveLeaderId, callback)
+                        insertOrgDriveLeader(insertOrg, org, driveLeaderId, orgId, callback)
                     }
                 })
                 

@@ -75,9 +75,15 @@ app.get('/UploadWishes', function(req, res) {
 	res.render('../views/WishUploader.ejs');
 });
 
-app.post('/registerUser', registerUser.registerUser);
+app.get('/UploadDrives', function(req, res) {
+	res.render('../views/RegisterUserUploader.ejs');
+});
+
+//app.post('/registerUser', registerUser.registerUser);
 
 app.post('/InsertWishes',wishes.uploadData);
+
+app.post('/InsertDrives', registerUser.registerOrg);
 
 app.get('/home/*', function(req,res){
 	
@@ -93,17 +99,22 @@ app.get("/client_token", function (req, res) {
 //TODO: move to separate file
 app.post("/transaction", function(req, res) {
   //collect nonce
-  var nonce = req.param("payment_method_nonce")
+  var totalAmt, nonce = req.param("payment_method_nonce")
   console.log("NONCE: " + req.param("state"))
+  if (typeof req.body != 'undefined') {
+    totalAmt = req.body.totalDonations
+    console.log("Total: " + totalAmt)
+  }
 
   //send txn to braintree
   gateway.transaction.sale({
-    amount: "10.00",
+    amount: totalAmt,
     paymentMethodNonce: nonce,
     options: {
       submitForSettlement: true
     }
   }, function (err, result) {
+    var txnObj = req.body
     if (typeof err != 'undefined' && err != null) {
       console.log(err)
       res.status(500)
@@ -111,10 +122,14 @@ app.post("/transaction", function(req, res) {
       res.send()
     } else {
       console.log(result)
-      //prep and send response
-      res.status(200)
-      res.write(JSON.stringify(req.body))
-      res.send()
+      txnObj.totalAmt = txnObj.totalDonations
+      sqllite.insertTxn(txnObj, function(){
+          //prep and send response
+          res.status(200)
+          res.write(JSON.stringify(req.body))
+          res.send()
+      });
+     
     }
     
 

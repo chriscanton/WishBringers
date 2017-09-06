@@ -13,7 +13,7 @@ var db = new sqlite3.Database(file);
 db.serialize(function() {
   if(!exists) {
     //Wishes
-    db.run("CREATE TABLE Wishes (id INTEGER PRIMARY KEY, description TEXT, price FLOAT, quantity INTEGER, age INTEGER, gender CHARACTER(1))");
+    db.run("CREATE TABLE Wishes (id INTEGER PRIMARY KEY, description TEXT, price FLOAT, quantity INTEGER, age INTEGER, gender CHARACTER(1), imgUrl TEXT)");
     //DriveLeader
     db.run("CREATE TABLE DriveLeader (id INTEGER PRIMARY KEY, name TEXT, email TEXT, g_token TEXT)")
     //Donor
@@ -21,7 +21,11 @@ db.serialize(function() {
     //ORGANIZATION
     db.run("CREATE TABLE Organization (id INTEGER PRIMARY KEY, name TEXT, owner INTEGER, link_name TEXT, image_url TEXT, FOREIGN KEY(owner) REFERENCES DRIVELEADER(id))")
     db.run("CREATE TABLE PERSON (id INTEGER PRIMARY KEY, FirstName TEXT, LastName TEXT, Salutation VARCHAR(3), Address TEXT, City TEXT, STATE CHAR(2), ZIP INTEGER, EMAIL TEXT)")
-    
+    //Transaction
+    db.run(" CREATE TABLE TXN (id INT PRIMARY KEY, NAME TEXT, ADDRESS Text, CITY Text, State VARCHAR(2), EMAIL Text, COMPANY Text, ORGANIZATION Text, Amount Real)")
+    //Drive Info
+    db.run("CREATE TABLE Drive (id INT PRIMARY KEY, leaderName TEXT, email TEXT, orgName TEXT, extId TEXT, urlVal TEXT, insertTime NUMBER)")
+
     console.log("tables created!")
   } else {
       db.each("SELECT count(1) AS rowCount FROM Wishes", function(err, row){
@@ -47,19 +51,30 @@ exports.fetchData = function(callback, sqlQuery) {
 
 exports.insertData = function(data)
 {
-    var stmt, insert = "INSERT INTO Wishes (description, price, quantity, age, gender)  VALUES (?, ?, ?, ?, ?)"
+    var stmt, insert = "INSERT INTO Wishes (description, price, quantity, age, gender, imgUrl)  VALUES (?, ?, ?, ?, ?, ?)"
     console.log("inserting wish: " + JSON.stringify(data))
     db.serialize(function() {
         try {
             if (data != null) {
                 console.log("prepare to insert: " + insert)
-                db.run(insert, data.giftDescription, data.price, data.quantityNeeded, data.age, data.gender)
+                db.run(insert, data.giftDescription, data.price, data.quantityNeeded, data.age, data.gender, data.imgUrl)
                 //console.log("INSERTING: table " + table + " data " + JSON.stringify(data))
             }
         } catch (err) {
             console.log("ERROR: " +  err)
         }
     })
+}
+
+exports.insertTxn = function(txnObj, callback) {
+    var insertTxn =  'INSERT INTO TXN (NAME, ADDRESS, CITY, STATE, EMAIL, COMPANY, ORGANIZATION, AMOUNT) VALUES(?,?,?,?,?,?,?,?)'
+    console.log(txnObj)
+    if (typeof txnObj != 'undefined') {
+        db.serialize(function(){
+            db.run(insertTxn, txnObj.name, txnObj.address, txnObj.city, txnObj.state, txnObj.email, txnObj.company, txnObj.organization, txnObj.totalAmt)
+        })
+        callback('SUCCESS')
+    } 
 }
 
 function insertOrgDriveLeader(insertOrg, org, driveLeaderId, orgId, callback) {
@@ -105,6 +120,31 @@ exports.insertOrg = function(org, driveLeader, callback) {
                 
             } catch (err) {
                 callback('ERROR')
+            }
+        })
+    }
+}
+
+exports.setupDrive = function(orgData, callback) {
+    var insertDriveInfo = "INSERT INTO Drive (leaderName, email, orgName, extId, urlVal, insertTime) VALUES(?,?,?,?,?,?)",
+    currTime = "" + new Date().getTime()
+
+    if (orgData != null && typeof orgData != 'undefined') {
+        db.serialize(function() {
+            try {
+                console.log(JSON.stringify(orgData) + " " + currTime)
+                db.run(insertDriveInfo, 
+                    orgData.leaderName, 
+                    orgData.email, 
+                    orgData.orgName, 
+                    orgData.extId, 
+                    orgData.urlVal, 
+                    currTime)
+                console.log("Success")
+                callback("Success")
+            } catch (err) {
+                console.log("DB ERROR: " + err)
+                callback("ERROR: " + err)
             }
         })
     }

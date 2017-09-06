@@ -19,6 +19,15 @@
 		font: inherit;
 		vertical-align: baseline;
 	}
+
+	.productImg {
+		max-width: 150px;
+		max-height: 150px;
+		padding: 5px;
+		margin: 0px;
+		border: 0px;
+		margin-top: 5px;
+	}
 	
 
 
@@ -1762,8 +1771,8 @@
 	hr {
 		border: 0;
 		border-bottom-style: solid;
-		border-bottom-width: 1px;
-		margin: 2em 0;
+		border-bottom-width: 0px;
+		margin: 0em 0;
 	}
 
 		hr.major {

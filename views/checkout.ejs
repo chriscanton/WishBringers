@@ -146,6 +146,11 @@ var createBraintree = function (token) {
 
       submit.removeAttribute('disabled')
 
+      var hiddenAmount = document.createElement("input")
+      hiddenAmount.setAttribute("type", "hidden")
+      hiddenAmount.setAttribute("name", "totalDonations")
+      hiddenAmount.value = window.localStorage.getItem("totalDonation")
+      form.appendChild(hiddenAmount)
       form.addEventListener('submit', function (event) {
       event.preventDefault();
 

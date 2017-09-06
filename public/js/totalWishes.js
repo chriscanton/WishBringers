@@ -12,5 +12,6 @@ appVar.controller('TotalWishesController', function($scope) {
 			console.log("adding " + $scope.wishlist[i].price)
 			$scope.total = $scope.total+$scope.wishlist[i].price;
 		}
+	window.localStorage.setItem('totalDonation', $scope.total)
 	
 });

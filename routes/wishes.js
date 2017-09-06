@@ -40,6 +40,7 @@ var mapRow = function(mapMe) {
 	vgtData.price = mapMe[2]
 	vgtData.quantityNeeded = mapMe[3]
 	vgtData.gender = mapMe[4]
+	vgtData.imgUrl = mapMe[5]
 	console.log(JSON.stringify(vgtData))
 
 	return vgtData

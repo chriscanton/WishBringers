@@ -9,7 +9,8 @@
     "braintree": "^2.0.2",
     "braintree-web": "^3.12.1",
     "ejs": "*",
-    "express": "3.2.6"
+    "express": "3.21.2",
+    "filereader": "^0.10.3"
   },
   "devDependencies": {
     "braintree": "^2.0.2",

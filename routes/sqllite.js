@@ -149,3 +149,20 @@ exports.setupDrive = function(orgData, callback) {
         })
     }
 }
+
+exports.searchDrive = function(urlString, callback) {
+    var selectDrive = 'SELECT orgName from Drive WHERE urlVal = ?'
+
+    db.serialize(function() {
+        try {
+            db.all(
+                selectDrive, urlString, function(err, rows) {
+                callback(err, rows)
+            })
+        } catch (err) {
+            callback(err)
+        }
+    }
+
+    )
+}

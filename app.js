@@ -142,6 +142,22 @@ app.get('/home', function(req,res){
 	res.render('home');
 });
 
+app.get('/drive/*', function(req, res) {
+  //search url pattern
+  var drivePath = req.path.split('/'),
+  pattern
+
+  if(drivePath.length >= 3) {
+    pattern = drivePath[2]
+  }
+  sqllite.searchDrive(pattern, function(err, rows){
+    console.log(rows[0])
+    res.cookie('FGT-Drive-Name', rows[0], {domain: 'localhost'})
+    res.cookie('FGT-URL-Pattern', pattern, {domain: 'localhost'})
+    res.redirect(301, '/home')
+  })
+});
+
 app.get('/getWishes',wishes.getWishes);
 app.get('/UploadWishes', function(req, res) {
 	res.render('../views/WishUploader.ejs');
@@ -157,5 +173,3 @@ app.post('/insertData', sqllite.insertData );
 http.createServer(app).listen(app.get('port'), function(){
   console.log('Express server listening on port ' + app.get('port'));
 });
-
-
